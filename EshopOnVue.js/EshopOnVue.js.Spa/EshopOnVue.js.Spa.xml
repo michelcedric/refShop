@@ -1,0 +1,119 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>EshopOnVue.js.Spa</name>
+    </assembly>
+    <members>
+        <member name="T:EshopOnVue.js.Spa.Application.Basket.Commands.AddBasketItemEndpoint">
+            <summary>
+            Endpoint to add an item in a basket
+            </summary>
+        </member>
+        <member name="M:EshopOnVue.js.Spa.Application.Basket.Commands.AddBasketItemEndpoint.#ctor(MediatR.IMediator,Microsoft.AspNetCore.Http.IHttpContextAccessor)">
+            <summary>
+            Default constructor
+            </summary>
+            <param name="mediator"></param>
+            <param name="httpContextAccessor"></param>
+        </member>
+        <member name="M:EshopOnVue.js.Spa.Application.Basket.Commands.AddBasketItemEndpoint.AddRoute(Microsoft.AspNetCore.Routing.IEndpointRouteBuilder)">
+            <summary>
+            Define routing of the endpoint
+            </summary>
+            <param name="app"></param>
+        </member>
+        <member name="M:EshopOnVue.js.Spa.Application.Basket.Commands.AddBasketItemEndpoint.HandleAsync(EshopOnVue.js.Spa.Application.Basket.Commands.AddBasketItemCommand)">
+            <summary>
+            Handler to add basket item
+            The link to the buyer is manage with a cookie
+            </summary>
+            <param name="addBasketItemCommand"></param>      
+            <returns></returns>
+        </member>
+        <member name="T:EshopOnVue.js.Spa.Application.Catalog.Queries.CatalogItemDto">
+            <summary>
+            Represent an element form the catalog
+            </summary>
+        </member>
+        <member name="P:EshopOnVue.js.Spa.Application.Catalog.Queries.CatalogItemDto.Id">
+            <summary>
+            The unique identifier
+            </summary>
+        </member>
+        <member name="P:EshopOnVue.js.Spa.Application.Catalog.Queries.CatalogItemDto.Name">
+            <summary>
+            The name of the item
+            </summary>
+        </member>
+        <member name="P:EshopOnVue.js.Spa.Application.Catalog.Queries.CatalogItemDto.PictureUri">
+            <summary>
+            Path without domain of the item's picture
+            </summary>
+        </member>
+        <member name="P:EshopOnVue.js.Spa.Application.Catalog.Queries.CatalogItemDto.Price">
+            <summary>
+            The price
+            </summary>
+        </member>
+        <member name="T:EshopOnVue.js.Spa.Application.Catalog.Queries.CatalogItemsQueryHandler">
+            <summary>
+            Handler to respond on the CatalogItemsQueryRequest
+            </summary>
+        </member>
+        <member name="M:EshopOnVue.js.Spa.Application.Catalog.Queries.CatalogItemsQueryHandler.#ctor(EshopOnVue.js.Core.Interfaces.Repositories.ICatalogItemRepository)">
+            <summary>
+            Default contructor
+            </summary>
+            <param name="catalogItemsRepository"></param>
+        </member>
+        <member name="M:EshopOnVue.js.Spa.Application.Catalog.Queries.CatalogItemsQueryHandler.Handle(EshopOnVue.js.Spa.Application.Catalog.Queries.CatalogItemsQueryRequest,System.Threading.CancellationToken)">
+            <summary>
+            Get specific CatalogItemDto corresponding to the request
+            </summary>
+            <param name="request"></param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
+        <member name="T:EshopOnVue.js.Spa.Application.Catalog.Queries.FilterCatalogEndpoint">
+            <summary>
+            Endpoint to get CatalogItem
+            </summary>
+        </member>
+        <member name="M:EshopOnVue.js.Spa.Application.Catalog.Queries.FilterCatalogEndpoint.#ctor(MediatR.IMediator)">
+            <summary>
+            Default constructor
+            </summary>
+            <param name="mediator"></param>
+        </member>
+        <member name="M:EshopOnVue.js.Spa.Application.Catalog.Queries.FilterCatalogEndpoint.AddRoute(Microsoft.AspNetCore.Routing.IEndpointRouteBuilder)">
+            <summary>
+            Define routing of the endpoint
+            </summary>
+            <param name="app"></param>
+        </member>
+        <member name="M:EshopOnVue.js.Spa.Application.Catalog.Queries.FilterCatalogEndpoint.HandleAsync(EshopOnVue.js.Spa.Application.Catalog.Queries.CatalogItemsQueryRequest)">
+            <summary>
+            Get all catalog items available
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="T:EshopOnVue.js.Spa.Controllers.GetAllWeatherForecastEndpoint">
+            <summary>
+            Endp point to manage WeatherForecast
+            </summary>  
+        </member>
+        <member name="M:EshopOnVue.js.Spa.Controllers.GetAllWeatherForecastEndpoint.#ctor(Microsoft.Extensions.Logging.ILogger{EshopOnVue.js.Spa.Controllers.GetAllWeatherForecastEndpoint})">
+            <summary>
+            Default constructor
+            </summary>
+            <param name="logger"></param>
+        </member>
+        <member name="M:EshopOnVue.js.Spa.Controllers.GetAllWeatherForecastEndpoint.HandleAsync">
+            <summary>
+            Get all WeatherForecast available
+            </summary>
+            <returns></returns>
+        </member>
+    </members>
+</doc>
