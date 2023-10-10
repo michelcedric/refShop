@@ -12,6 +12,7 @@ namespace EshopOnVue.js.Core.Interfaces.Repositories
     {
         Task<TEntity> GetByIdAsync(TKey id, CancellationToken cancellationToken = default);
         Task<IReadOnlyList<TEntity>> ListAllAsync(CancellationToken cancellationToken = default);
+        Task<IReadOnlyList<TEntity>> ListAllAsync(int pageIndex, int pageSize, CancellationToken cancellationToken = default);
         Task<TEntity> AddAsync(TEntity entity, CancellationToken cancellationToken = default);
         Task<IEnumerable<TEntity>> AddAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default);
         Task UpdateAsync(TEntity entity, CancellationToken cancellationToken = default);

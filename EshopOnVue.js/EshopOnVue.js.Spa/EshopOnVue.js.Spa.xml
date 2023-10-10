@@ -30,6 +30,79 @@
             <param name="addBasketItemCommand"></param>      
             <returns></returns>
         </member>
+        <member name="T:EshopOnVue.js.Spa.Application.CatalogItem.Queries.CatalogItemDetailsDto">
+            <summary>
+            Represent an element form the catalog
+            </summary>
+        </member>
+        <member name="P:EshopOnVue.js.Spa.Application.CatalogItem.Queries.CatalogItemDetailsDto.Id">
+            <summary>
+            The unique identifier
+            </summary>
+        </member>
+        <member name="P:EshopOnVue.js.Spa.Application.CatalogItem.Queries.CatalogItemDetailsDto.Name">
+            <summary>
+            The name of the item
+            </summary>
+        </member>
+        <member name="P:EshopOnVue.js.Spa.Application.CatalogItem.Queries.CatalogItemDetailsDto.PictureUri">
+            <summary>
+            Path without domain of the item's picture
+            </summary>
+        </member>
+        <member name="P:EshopOnVue.js.Spa.Application.CatalogItem.Queries.CatalogItemDetailsDto.Price">
+            <summary>
+            The price
+            </summary>
+        </member>
+        <member name="P:EshopOnVue.js.Spa.Application.CatalogItem.Queries.CatalogItemDetailsDto.MemberPrice">
+            <summary>
+            The price reserved for member only
+            </summary>
+        </member>
+        <member name="T:EshopOnVue.js.Spa.Application.CatalogItem.Queries.CatalogItemDetailsEndpoint">
+            <summary>
+            Endpoint to get CatalogItem
+            </summary>
+        </member>
+        <member name="M:EshopOnVue.js.Spa.Application.CatalogItem.Queries.CatalogItemDetailsEndpoint.#ctor(MediatR.IMediator)">
+            <summary>
+            Default constructor
+            </summary>
+            <param name="mediator"></param>
+        </member>
+        <member name="M:EshopOnVue.js.Spa.Application.CatalogItem.Queries.CatalogItemDetailsEndpoint.AddRoute(Microsoft.AspNetCore.Routing.IEndpointRouteBuilder)">
+            <summary>
+            Define routing of the endpoint
+            </summary>
+            <param name="app"></param>
+        </member>
+        <member name="M:EshopOnVue.js.Spa.Application.CatalogItem.Queries.CatalogItemDetailsEndpoint.HandleAsync(EshopOnVue.js.Spa.Application.CatalogItem.Queries.CatalogItemDetailsQueryRequest)">
+            <summary>
+            Get all catalog items available
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="T:EshopOnVue.js.Spa.Application.CatalogItem.Queries.CatalogItemDetailsQueryHandler">
+            <summary>
+            Handler to respond on the CatalogItemsQueryRequest
+            </summary>
+        </member>
+        <member name="M:EshopOnVue.js.Spa.Application.CatalogItem.Queries.CatalogItemDetailsQueryHandler.#ctor(EshopOnVue.js.Core.Interfaces.Repositories.ICatalogItemRepository)">
+            <summary>
+            Default contructor
+            </summary>
+            <param name="catalogItemsRepository"></param>
+        </member>
+        <member name="M:EshopOnVue.js.Spa.Application.CatalogItem.Queries.CatalogItemDetailsQueryHandler.Handle(EshopOnVue.js.Spa.Application.CatalogItem.Queries.CatalogItemDetailsQueryRequest,System.Threading.CancellationToken)">
+            <summary>
+            Get specific CatalogItemDto corresponding to the request
+            </summary>
+            <param name="request"></param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
         <member name="T:EshopOnVue.js.Spa.Application.Catalog.Queries.CatalogItemDto">
             <summary>
             Represent an element form the catalog
@@ -53,6 +126,11 @@
         <member name="P:EshopOnVue.js.Spa.Application.Catalog.Queries.CatalogItemDto.Price">
             <summary>
             The price
+            </summary>
+        </member>
+        <member name="P:EshopOnVue.js.Spa.Application.Catalog.Queries.CatalogItemDto.MemberPrice">
+            <summary>
+            The price reserved for member only
             </summary>
         </member>
         <member name="T:EshopOnVue.js.Spa.Application.Catalog.Queries.CatalogItemsQueryHandler">

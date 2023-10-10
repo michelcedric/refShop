@@ -47,6 +47,11 @@ namespace EshopOnVue.js.Infrastructure.Data
             return await _dbSet.ToListAsync(cancellationToken);
         }
 
+        public virtual async Task<IReadOnlyList<TEntity>> ListAllAsync(int pageIndex, int pageSize, CancellationToken cancellationToken = default)
+        {
+            return await _dbSet.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync(cancellationToken);
+        }
+
         public async Task<TEntity> AddAsync(TEntity entity, CancellationToken cancellationToken = default)
         {
             await _dbSet.AddAsync(entity, cancellationToken);

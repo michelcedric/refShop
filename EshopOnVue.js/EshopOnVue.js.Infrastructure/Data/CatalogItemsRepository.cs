@@ -2,6 +2,7 @@
 using EshopOnVue.js.Core.Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -10,8 +11,11 @@ namespace EshopOnVue.js.Infrastructure.Data
 {
     public class CatalogItemsRepository : EfRepository<CatalogItem, Guid, EshopContext>, ICatalogItemRepository
     {
+        private readonly EshopContext _dbContext;
+
         public CatalogItemsRepository(EshopContext dbContext) : base(dbContext)
         {
+            _dbContext = dbContext;
         }
 
         /// <summary>
@@ -20,7 +24,7 @@ namespace EshopOnVue.js.Infrastructure.Data
         /// <param name="catalogItemId"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public async Task<decimal?> GetPrice(Guid catalogItemId, CancellationToken cancellationToken = default)
+        public async Task<decimal?> GetPrice(Guid catalogItemId, CancellationToken cancellationToken)
         {
             try
             {
@@ -33,6 +37,13 @@ namespace EshopOnVue.js.Infrastructure.Data
             {
                 return null;
             }
+        }     
+        public async Task<CatalogItem?> GetItemWithSize(Guid id, CancellationToken cancellationToken)
+        {
+            return await _dbContext.CatalogItems
+                .Include(c => c.Sizes)
+                .Include(c => c.ItemSizesWithStocks)
+                .FirstOrDefaultAsync(c => c.Id == id, cancellationToken);
         }
     }
 }

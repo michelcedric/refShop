@@ -1,13 +1,13 @@
 ﻿using MediatR;
 using MinimalApi.Endpoint;
 
-namespace EshopOnVue.js.Spa.Application.Catalog.Queries
+namespace EshopOnVue.js.Spa.Application.CatalogItem.Queries
 {
 
     /// <summary>
     /// Endpoint to get CatalogItem
     /// </summary>
-    public class FilterCatalogEndpoint : IEndpoint<IResult, CatalogItemsQueryRequest>
+    public class CatalogItemDetailsEndpoint : IEndpoint<IResult, CatalogItemDetailsQueryRequest>
     {
         private readonly IMediator _mediator;
 
@@ -15,7 +15,7 @@ namespace EshopOnVue.js.Spa.Application.Catalog.Queries
         /// Default constructor
         /// </summary>
         /// <param name="mediator"></param>
-        public FilterCatalogEndpoint(IMediator mediator)
+        public CatalogItemDetailsEndpoint(IMediator mediator)
         {
             _mediator = mediator;
         }
@@ -26,9 +26,9 @@ namespace EshopOnVue.js.Spa.Application.Catalog.Queries
         /// <param name="app"></param>
         public void AddRoute(IEndpointRouteBuilder app)
         {
-            app.MapGet("api/Catalog", async (int? pageSize, int? page)
-                => await HandleAsync(new CatalogItemsQueryRequest(pageSize, page)))
-                .Produces<IEnumerable<CatalogItemDto>>(StatusCodes.Status200OK);             
+            app.MapGet("api/Catalog/{id}", async (Guid id)
+                => await HandleAsync(new CatalogItemDetailsQueryRequest(id)))
+                .Produces<CatalogItemDetailsDto>(StatusCodes.Status200OK);                
         }
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace EshopOnVue.js.Spa.Application.Catalog.Queries
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        public async Task<IResult> HandleAsync(CatalogItemsQueryRequest request)
+        public async Task<IResult> HandleAsync(CatalogItemDetailsQueryRequest request)
         {
             var result = await _mediator.Send(request);
             return Results.Ok(result);

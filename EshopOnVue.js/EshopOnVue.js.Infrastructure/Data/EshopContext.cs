@@ -16,5 +16,15 @@ namespace EshopOnVue.js.Infrastructure.Data
 
         public DbSet<BasketItem> BasketItems { get; set; }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<CatalogItem>()
+                .HasMany(e => e.Sizes)
+                .WithMany(e => e.CatalogItems)
+                .UsingEntity<ItemSizesWithStock>();
+
+            base.OnModelCreating(modelBuilder);
+        }
+
     }
 }

@@ -29,7 +29,7 @@
         },
         methods: {
             getCatalogItems() {
-                axios.get('api/catalog')
+                axios.get('/api/catalog')
                     .then((response) => {
                         this.catalogItems = response.data;
                     })
