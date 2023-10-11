@@ -2,59 +2,62 @@
     <section class="esh-catalog-filters">
         <div class="container">
             <p v-if="!catalogItem"><em>Loading...</em></p>
-            <img class="esh-catalog-thumbnail" :src="'/' + catalogItem.pictureUri" />
-            <div class="esh-catalog-name">
-                <span>{{ catalogItem.name }}</span>
-            </div>
-            <div class="esh-catalog-price">
-                <span>{{ formatPrice(catalogItem.price) }}</span>
-            </div>
-            <div class="esh-catalog-price">
-                <span>{{ formatPrice(catalogItem.memberPrice) }}</span>
-            </div>
-            <div class="esh-catalog-price">
-                <select v-model="selected">
-                    <option v-for="option in catalogItem.sizes" :value="option.id">
-                        {{ option.description }}
-                    </option>
-                </select>
+            <div v-if="catalogItem">
+
+                <img class="esh-catalog-thumbnail" :src="'/' + catalogItem.pictureUri" />
+                <div class="esh-catalog-name">
+                    <span>{{ catalogItem.name }}</span>
+                </div>
+                <div class="esh-catalog-price">
+                    <span>{{ formatPrice(catalogItem.price) }}</span>
+                </div>
+                <div class="esh-catalog-price">
+                    <span>{{ formatPrice(catalogItem.memberPrice) }}</span>
+                </div>
+                <div class="esh-catalog-price">
+                    <select v-model="selected">
+                        <option v-for="option in catalogItem.sizes" :value="option.id">
+                            {{ option.description }}
+                        </option>
+                    </select>
+                </div>
             </div>
         </div>
     </section>
 </template>
 
-<script>
-import CatalogDetail from "./CatalogDetail";
+<script lang="ts">
+import { Options, Vue } from "vue-class-component";
+import CatalogItemDetailsData from "../types/CatalogItemDetailsData";
 import axios from 'axios';
-export default {
-    name: "CatalogDetail",
-    components: {
-        CatalogDetail
-    },
-    data() {
-        return {
-            catalogItem: Object
-        }
-    },
-    methods: {
-        getCatalogItem() {
+import Size from "../types/CatalogItemDetailsData";
 
-            axios.get('/api/catalog/' + this.$route.params.CatalogItemId)
-                .then((response) => {
-                    this.catalogItem = response.data;
-                })
-                .catch(function (error) {
-                    alert(error);
-                });
-        },
-        formatPrice(value) {
-            let val = (value / 1).toFixed(2).replace('.', ',')
-            return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
-        }
-    },
-    mounted() {
+@Options({
+    data() {
+        return { catalogItem: undefined }
+    }
+})
+export default class CatalogDetail extends Vue {
+    catalogItem: CatalogItemDetailsData | undefined;
+    selected: Size | undefined;
+    mounted(): void {
         this.getCatalogItem();
     }
+    getCatalogItem() {
+
+        axios.get<CatalogItemDetailsData>('/api/catalog/' + this.$route.params.CatalogItemId)
+            .then((response) => {
+                this.catalogItem = response.data;
+            })
+            .catch(function (error) {
+                alert(error);
+            });
+    }
+    formatPrice(value: number) {
+        let val = (value / 1).toFixed(2).replace('.', ',')
+        return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
+    }
+
 };
 </script>
 

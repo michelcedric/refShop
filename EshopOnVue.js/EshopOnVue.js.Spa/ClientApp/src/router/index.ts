@@ -1,6 +1,6 @@
 ﻿import { createWebHistory, createRouter } from "vue-router";
 import Home from "@/components/Home.vue";
-import CatalogDetail from "@/components/CatalogDetail";
+import CatalogDetail from "@/components/CatalogDetail.vue";
 import Counter from "@/components/Counter.vue";
 import FetchData from "@/components/FetchData.vue";
 

@@ -15,7 +15,7 @@ namespace EshopOnVue.js.Core.Tests.Entities
             var price = 42.5M;
             var pictureName = "test.png";
 
-            var catalogItem = CatalogItem.Create(name, description, price, pictureName);
+            var catalogItem = CatalogItem.Create(name, description, price, price, pictureName);
 
             Assert.AreNotEqual(Guid.Empty, catalogItem.Id);
             Assert.AreEqual(name, catalogItem.Name);

@@ -3,14 +3,19 @@
   <router-view />
 </template>
 
-<script>
-    import NavMenu from './components/NavMenu.vue'
+<script lang="ts">
+import { Options, Vue } from 'vue-class-component';
+import Home from './components/Home.vue';
+import NavMenu from './components/NavMenu.vue';
 
-export default {
-  name: 'App',
+@Options({
   components: {
-      NavMenu
-  }
+    Home,
+    NavMenu
+  },
+})
+export default class App extends Vue {
+
 }
 </script>
 
