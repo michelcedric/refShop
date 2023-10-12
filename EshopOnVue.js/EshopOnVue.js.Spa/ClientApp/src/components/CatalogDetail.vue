@@ -15,12 +15,14 @@
                     <span>{{ formatPrice(catalogItem.memberPrice) }}</span>
                 </div>
                 <div class="esh-catalog-price">
-                    <select v-model="selected">
-                        <option v-for="option in catalogItem.sizes" :value="option.id">
+                    <select v-if="catalogItem.sizes.length > 0" v-model="selectedSize">
+                        <option v-for="option in catalogItem.sizes" :value="option">
                             {{ option.description }}
                         </option>
                     </select>
                 </div>
+                <button @click="addToBasket(false)">Add to basket and valid</button>
+                <button @click="addToBasket(true)">Add to basket and cotinue shopping</button>
             </div>
         </div>
     </section>
@@ -29,6 +31,7 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import CatalogItemDetailsData from "../types/CatalogItemDetailsData";
+import BasketItemData from "../types/basketItemData";
 import axios from 'axios';
 import Size from "../types/CatalogItemDetailsData";
 
@@ -39,7 +42,7 @@ import Size from "../types/CatalogItemDetailsData";
 })
 export default class CatalogDetail extends Vue {
     catalogItem: CatalogItemDetailsData | undefined;
-    selected: Size | undefined;
+    selectedSize: Size | undefined;
     mounted(): void {
         this.getCatalogItem();
     }
@@ -52,6 +55,36 @@ export default class CatalogDetail extends Vue {
             .catch(function (error) {
                 alert(error);
             });
+    }
+    addToBasket(continueShopping: boolean): void {
+        if (this.catalogItem) {
+            if (this.catalogItem.sizes.length > 0 && !this.selectedSize) {
+                alert("Please select a size");
+                return;
+            }
+            const existingBasket = localStorage.getItem("refShopBasket");
+            const newBasketItem = new BasketItemData(this.catalogItem, this.selectedSize, 1)
+            if (existingBasket) {
+                const basket = JSON.parse(existingBasket) as BasketItemData[]
+                const existingSameBasketItem = basket.find(b => b.catalogItem.id == newBasketItem.catalogItem.id && b.size?.id == newBasketItem.size?.id);
+                if (existingSameBasketItem) {
+                    existingSameBasketItem.quantity += 1;
+                }
+                else {
+                    basket.push(newBasketItem);
+                }
+                localStorage.setItem("refShopBasket", JSON.stringify(basket));
+            } else {
+                const basket: BasketItemData[] = [];
+                basket.push(newBasketItem);
+                localStorage.setItem("refShopBasket", JSON.stringify(basket));
+            }
+            if (continueShopping) {
+                this.$router.push("/")
+            } else {
+                this.$router.push("/basket")
+            }
+        }
     }
     formatPrice(value: number) {
         let val = (value / 1).toFixed(2).replace('.', ',')

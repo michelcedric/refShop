@@ -84,7 +84,7 @@ app.UseSpa(spa =>
         spa.Options.SourcePath = "ClientApp/dist";
 
     if (app.Environment.IsDevelopment())
-    {
+    {        
         spa.UseVueCli(npmScript: "serve");
     }
 

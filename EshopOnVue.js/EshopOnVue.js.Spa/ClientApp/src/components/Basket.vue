@@ -1,14 +1,10 @@
 <template>
-    <section class="esh-catalog-hero">
-        <div class="container">
-            <img class="esh-catalog-title" src="../assets/main_banner_text.png" />
-        </div>
-    </section>
     <section class="esh-catalog-filters">
         <div class="container">
-            <p v-if="!catalogItems"><em>Loading...</em></p>
+            <p v-if="basketItems.length == 0"><em>Empty basket</em></p>
             <div class="esh-catalog-items row">
-                <CatalogItem :catalogItem="catalogItem" v-for="catalogItem of catalogItems" v-bind:key="catalogItem" />
+                <BasketItem @remove-item="removeItem" @update-quantity="updateQuantity" :basketItem="basketItem"
+                    v-for="basketItem of basketItems" v-bind:key="basketItem" />
             </div>
         </div>
     </section>
@@ -16,30 +12,39 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import CatalogItem from "./CatalogItem.vue";
-import CatalogItemData from "../types/CatalogItemData"
-import axios from 'axios';
+import BasketItem from "./BasketItem.vue";
 
-@Options({   
+import BasketItemData from "../types/basketItemData";
+
+@Options({
     components: {
-        CatalogItem
-    },
+        BasketItem
+    }
 })
-export default class Home extends Vue {
+export default class Basket extends Vue {
 
-    catalogItems: CatalogItemData[] = [];
+    basketItems: BasketItemData[] = [];
 
     mounted(): void {
-        this.getCatalogItems();
+        this.getBasketItems();
     }
-    getCatalogItems() {
-        axios.get<CatalogItemData[]>('/api/catalog')
-            .then((response) => {
-                this.catalogItems = response.data;
-            })
-            .catch(function (error) {
-                alert(error);
-            });
+    getBasketItems() {
+        const existingBasket = localStorage.getItem("refShopBasket");
+        if (existingBasket) {
+            this.basketItems = JSON.parse(existingBasket) as BasketItemData[]
+        }
+    }
+    removeItem(id: string) {
+        this.basketItems = this.basketItems.filter(i => i.id != id);
+        localStorage.setItem("refShopBasket", JSON.stringify(this.basketItems));
+    }
+
+    updateQuantity(id: string, quantity: number) {
+        const item = this.basketItems.find(i => i.id == id);
+        if (item) {
+            item.quantity = quantity;          
+            localStorage.setItem("refShopBasket", JSON.stringify(this.basketItems));
+        }
     }
 };
 </script>
