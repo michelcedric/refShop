@@ -1,13 +1,53 @@
 <template>
-    <section class="esh-catalog-filters">
-        <div class="container">
-            <p v-if="basketItems.length == 0"><em>Empty basket</em></p>
-            <div class="esh-catalog-items row">
-                <BasketItem @remove-item="removeItem" @update-quantity="updateQuantity" :basketItem="basketItem"
-                    v-for="basketItem of basketItems" v-bind:key="basketItem" />
-            </div>
-        </div>
-    </section>
+    <div @click="expandItems = !expandItems;" style="margin: 5px; background-color: lightgray;">Items</div>
+    <v-expand-transition>
+        <v-card v-show="expandItems" class="mx-auto" style="background-color:floralwhite;">
+            <section class="esh-catalog-filters">
+                <div class="container">
+                    <p v-if="basketItems.length == 0"><em>Empty basket</em></p>
+                    <div class="esh-catalog-items row">
+                        <BasketItem @remove-item="removeItem" @update-quantity="updateQuantity" :basketItem="basketItem"
+                            v-for="basketItem of basketItems" v-bind:key="basketItem" />
+                    </div>
+                    <v-btn v-if="basketItems.length > 0" @click="step2">Next</v-btn>
+                </div>
+            </section>
+        </v-card>
+    </v-expand-transition>
+    <div v-if="basketItems.length > 0" @click="expandPersonnalInformation = !expandPersonnalInformation;"
+        style=" margin: 5px; background-color: floralwhite;">
+        Personal info
+    </div>
+    <v-expand-transition v-if="basketItems.length > 0">
+        <v-card v-show="expandPersonnalInformation" class="mx-auto" style="background-color: beige;">
+
+            <v-form v-model="valid" ref="form">
+                <v-container>
+                    <v-row>
+                        <v-col cols="12" md="4">
+                            <v-text-field v-model="firstname" label="First name" :rules="firstnameRules"></v-text-field>
+                        </v-col>
+
+                        <v-col cols="12" md="4">
+                            <v-text-field v-model="lastname" label="Last name" :rules="nameRules"></v-text-field>
+                        </v-col>
+
+                        <v-col cols="12" md="4">
+                            <v-text-field type="mail" v-model="mail" label="E-mail" :rules="emailRules"></v-text-field>
+                        </v-col>
+                    </v-row>
+                </v-container>
+            </v-form>
+            <v-btn v-if="basketItems.length > 0" @click="step3">Validate</v-btn>
+        </v-card>
+    </v-expand-transition>
+    <div v-if="orderValidate" @click="expandPayment = !expandPayment;" style=" margin: 5px; background-color: lightgray;">
+        Payment</div>
+    <v-expand-transition v-if="orderValidate">
+        <v-card class="mx-auto" style="background-color: floralwhite;">
+            Payment detail
+        </v-card>
+    </v-expand-transition>
 </template>
 
 <script lang="ts">
@@ -15,15 +55,43 @@ import { Options, Vue } from "vue-class-component";
 import BasketItem from "./BasketItem.vue";
 
 import BasketItemData from "../types/basketItemData";
+import { VForm } from "vuetify/lib/components/index.mjs";
 
 @Options({
     components: {
         BasketItem
+    },
+    data() {
+        return {
+            mail: '',
+            firstname: '',
+            lastname: '',
+        }
     }
 })
 export default class Basket extends Vue {
-
+    expandItems = true;
+    expandPersonnalInformation = false;
+    expandPayment = false;
     basketItems: BasketItemData[] = [];
+    orderValidate = false;
+    mail: string | undefined;
+    valid = false;
+    firstname = '';
+    lastname = '';
+
+    nameRules = [
+        (v: any) => !!v || 'Name is required',
+        (v: any) => (v && v.length >= 3) || 'Name must be more than 3 characters',
+    ];
+    firstnameRules = [
+        (v: any) => !!v || 'FirstName is required',
+        (v: any) => (v && v.length >= 3) || 'FirstName must be more than 3 characters',
+    ];
+    emailRules = [
+        (v: any) => !!v || 'E-mail is required',
+        (v: any) => /.+@.+\..+/.test(v) || 'E-mail must be valid',
+    ];
 
     mounted(): void {
         this.getBasketItems();
@@ -42,7 +110,23 @@ export default class Basket extends Vue {
     updateQuantity(id: string, quantity: number) {
         const item = this.basketItems.find(i => i.id == id);
         if (item) {
-            item.quantity = quantity;          
+            item.quantity = quantity;
+            localStorage.setItem("refShopBasket", JSON.stringify(this.basketItems));
+        }
+    }
+    step2(): void {
+        this.expandItems = false;
+        this.expandPersonnalInformation = true;
+    }
+    async step3(): Promise<void> {
+        const form = this.$refs.form as VForm
+        const result = await form.validate();
+        if (result.valid) {
+            this.expandItems = false;
+            this.expandPersonnalInformation = false;
+            this.expandPayment = true;
+            this.orderValidate = true;
+            this.basketItems = [];
             localStorage.setItem("refShopBasket", JSON.stringify(this.basketItems));
         }
     }

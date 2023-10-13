@@ -6,9 +6,19 @@ import CatalogDetail from "@/components/CatalogDetail.vue";
 const routes = [
     {
         path: "/",
+        name: "root",
+        component: Home,
+    }, 
+    {
+        path: "/home",
         name: "Home",
         component: Home,
-    },    
+    },
+    {
+        path: "/catalog",
+        name: "catalog",
+        component: Home,
+    },      
     {
         path: "/basket",
         name: "Basket",

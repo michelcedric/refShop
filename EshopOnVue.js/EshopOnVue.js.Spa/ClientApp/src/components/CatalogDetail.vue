@@ -15,14 +15,12 @@
                     <span>{{ formatPrice(catalogItem.memberPrice) }}</span>
                 </div>
                 <div class="esh-catalog-price">
-                    <select v-if="catalogItem.sizes.length > 0" v-model="selectedSize">
-                        <option v-for="option in catalogItem.sizes" :value="option">
-                            {{ option.description }}
-                        </option>
-                    </select>
+                    <v-select v-model="selectedSizeId" item-value="id" item-title="description" label="Select size"
+                        v-if="catalogItem.sizes.length > 0" :items="catalogItem.sizes">
+                    </v-select>
                 </div>
-                <button @click="addToBasket(false)">Add to basket and valid</button>
-                <button @click="addToBasket(true)">Add to basket and cotinue shopping</button>
+                <v-btn @click="addToBasket(false)">Add to basket and valid</v-btn>
+                <v-btn @click="addToBasket(true)">Add to basket and cotinue shopping</v-btn>
             </div>
         </div>
     </section>
@@ -33,16 +31,15 @@ import { Options, Vue } from "vue-class-component";
 import CatalogItemDetailsData from "../types/CatalogItemDetailsData";
 import BasketItemData from "../types/basketItemData";
 import axios from 'axios';
-import Size from "../types/CatalogItemDetailsData";
 
 @Options({
     data() {
-        return { catalogItem: undefined }
+        return { catalogItem: undefined, selectedSizeId: undefined }
     }
 })
 export default class CatalogDetail extends Vue {
     catalogItem: CatalogItemDetailsData | undefined;
-    selectedSize: Size | undefined;
+    selectedSizeId: string | undefined;
     mounted(): void {
         this.getCatalogItem();
     }
@@ -58,12 +55,13 @@ export default class CatalogDetail extends Vue {
     }
     addToBasket(continueShopping: boolean): void {
         if (this.catalogItem) {
-            if (this.catalogItem.sizes.length > 0 && !this.selectedSize) {
+            if (this.catalogItem.sizes.length > 0 && !this.selectedSizeId) {
                 alert("Please select a size");
                 return;
             }
             const existingBasket = localStorage.getItem("refShopBasket");
-            const newBasketItem = new BasketItemData(this.catalogItem, this.selectedSize, 1)
+            const selectedSize = this.catalogItem.sizes.find(s => s.id == this.selectedSizeId);
+            const newBasketItem = new BasketItemData(this.catalogItem, selectedSize, 1)
             if (existingBasket) {
                 const basket = JSON.parse(existingBasket) as BasketItemData[]
                 const existingSameBasketItem = basket.find(b => b.catalogItem.id == newBasketItem.catalogItem.id && b.size?.id == newBasketItem.size?.id);

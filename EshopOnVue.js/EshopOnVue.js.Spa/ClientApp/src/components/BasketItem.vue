@@ -10,14 +10,14 @@
                 <span>{{ basketItem.size?.description }}</span>
             </div>
             <div class="esh-catalog-name">
-                <input min="1" type="number" v-model="basketItem.quantity"
+                <v-text-field min="1" type="number" v-model="basketItem.quantity"
                     @change="updateQuantity(basketItem.id, basketItem.quantity)" />
             </div>
             <div class="esh-catalog-price">
                 <span>{{ formatPrice(basketItem.catalogItem.price) }}</span>
             </div>
             <div class="esh-catalog-name">
-                <span> <button @click="removeBasketItem(basketItem.id)">Remove</button></span>
+                <span> <v-btn @click="removeBasketItem(basketItem.id)">Remove</v-btn></span>
             </div>
 
         </div>
